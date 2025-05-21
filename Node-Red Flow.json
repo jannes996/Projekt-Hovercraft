@@ -1,0 +1,238 @@
+[
+    {
+        "id": "92d6a06cbe136d3b",
+        "type": "tab",
+        "label": "Hovercraft",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "774678439d30309c",
+        "type": "ui_joystick",
+        "z": "92d6a06cbe136d3b",
+        "name": "X-Achse",
+        "group": "6c712f7234444723",
+        "order": 2,
+        "width": 6,
+        "height": 5,
+        "trigger": "all",
+        "timeInterval": "50",
+        "useThemeColor": true,
+        "color": "#000000",
+        "threshold": 0.1,
+        "directions": "hor",
+        "shape": "circle",
+        "centerAtRelease": true,
+        "x": 100,
+        "y": 120,
+        "wires": [
+            [
+                "8d678e41dc390789"
+            ]
+        ]
+    },
+    {
+        "id": "58665177a5c7b0fa",
+        "type": "ui_joystick",
+        "z": "92d6a06cbe136d3b",
+        "name": "Y-Achse",
+        "group": "6c712f7234444723",
+        "order": 1,
+        "width": 6,
+        "height": 5,
+        "trigger": "all",
+        "timeInterval": "50",
+        "useThemeColor": true,
+        "color": "#000000",
+        "threshold": 0.1,
+        "directions": "ver",
+        "shape": "circle",
+        "centerAtRelease": true,
+        "x": 100,
+        "y": 240,
+        "wires": [
+            [
+                "c0594f596b4c821f"
+            ]
+        ]
+    },
+    {
+        "id": "8d678e41dc390789",
+        "type": "function",
+        "z": "92d6a06cbe136d3b",
+        "name": "function 1",
+        "func": "let vx = msg.payload.vector.x;  // -1 bis 1\n\n// Mapping: -1 → 40, 0 → 70, 1 → 100\nfunction mapX(value) {\n    return Math.round(40 + ((value + 1) / 2) * 60);\n}\n\nlet pwm_x = mapX(vx);\n\nmsg.payload = JSON.stringify({\n    X: pwm_x\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 120,
+        "wires": [
+            [
+                "782cd6ac29d347cd"
+            ]
+        ]
+    },
+    {
+        "id": "782cd6ac29d347cd",
+        "type": "mqtt out",
+        "z": "92d6a06cbe136d3b",
+        "name": "",
+        "topic": "Hovercraft/Steuerung",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "65f879861659cc8a",
+        "x": 520,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "8a26273150232a55",
+        "type": "remote-access",
+        "z": "92d6a06cbe136d3b",
+        "confignode": "13a4f2cd0da0a413",
+        "name": "",
+        "verbose": 0,
+        "x": 500,
+        "y": 360,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c0594f596b4c821f",
+        "type": "function",
+        "z": "92d6a06cbe136d3b",
+        "name": "function 2",
+        "func": "let vy = msg.payload.vector.y;  // -1 bis 1\n\n// Mapping: alles ≤ 0 → 40, 0 → 40, 1 → 100\nfunction mapY(value) {\n    if (value <= 0) {\n        return 40;\n    } else {\n        return Math.round(40 + value * 60);\n    }\n}\n\nlet pwm_y = mapY(vy);\n\nmsg.payload = JSON.stringify({\n    Y: pwm_y\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 240,
+        "wires": [
+            [
+                "782cd6ac29d347cd"
+            ]
+        ]
+    },
+    {
+        "id": "d2e77b888b374da1",
+        "type": "ui_switch",
+        "z": "92d6a06cbe136d3b",
+        "name": "",
+        "label": "Auftrieb",
+        "tooltip": "",
+        "group": "6c712f7234444723",
+        "order": 3,
+        "width": 2,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "{\"Motor\":\"ON\"}",
+        "onvalueType": "json",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "{\"Motor\":\"OFF\"}",
+        "offvalueType": "json",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 100,
+        "y": 360,
+        "wires": [
+            [
+                "782cd6ac29d347cd"
+            ]
+        ]
+    },
+    {
+        "id": "affb250c54334f19",
+        "type": "ui_spacer",
+        "z": "92d6a06cbe136d3b",
+        "name": "spacer",
+        "group": "6c712f7234444723",
+        "order": 4,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "6c712f7234444723",
+        "type": "ui_group",
+        "name": "",
+        "tab": "6e466dd47435dc1d",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "65f879861659cc8a",
+        "type": "mqtt-broker",
+        "name": "localhost",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "13a4f2cd0da0a413",
+        "type": "remote-config",
+        "name": "Hovercraft",
+        "host": "localhost",
+        "protocol": "http",
+        "port": "1880",
+        "baseurl": "/ui",
+        "instancehash": "tboqvx2ix1ul3tspr2e9b47oboswqxtmzjj85n3mbm6it859jrf5z5lbk9orly8u",
+        "server": "nodered04.remote-red.com",
+        "region": "de"
+    },
+    {
+        "id": "6e466dd47435dc1d",
+        "type": "ui_tab",
+        "name": "Hovercraft",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
