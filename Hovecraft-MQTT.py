@@ -6,8 +6,8 @@ from umqtt.simple import MQTTClient
 import ujson
 
 # Variablen und PINs definieren
-motor1_pin = PWM(Pin(3), freq=50)
-motor2_pin = PWM(Pin(4), freq=50)
+motor_heck_pin = PWM(Pin(3), freq=50)
+motor_auftrieb_pin = PWM(Pin(4), freq=50)
 servo_pin = PWM(Pin(5), freq=50)
 content = "0"
 
@@ -55,13 +55,13 @@ while True:
         data = ujson.loads(content)
         y_value = int(data["Y"])
         print(y_value)
-        motor1_pin.duty(y_value)
+        motor_heck_pin.duty(y_value)
         content = "0"
         
     if "Motor1" in content:
         data = ujson.loads(content)
         if data["Motor1"] == "ON":
-            motor1_pin.duty(115)
+            motor_auftrieb_pin.duty(115)
         elif data["Motor1"] == "OFF":
-            motor1_pin.duty(40)
+            motor_auftrieb_pin.duty(40)
         content = "0"
